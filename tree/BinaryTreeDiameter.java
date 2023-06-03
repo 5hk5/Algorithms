@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class WeightedEdge {
+public class BinaryTreeDiameter {
     /* 트리의 지름
     * = 리프노드 간 간선들의 최대 가중치 구하기
     * 입력값 1 : 노드 개수
@@ -36,11 +37,17 @@ public class WeightedEdge {
 
         int nodes = Integer.parseInt(br.readLine());
 
+        //노드 1개일 때 예외 처리
+        if(nodes == 1) {
+            System.out.println(0);
+            System.exit(0);
+        }
+
         tree = new ArrayList[nodes+1];
         visited = new boolean[nodes+1];
 
-        for (int i=1;i<nodes+1;i++){
-            tree[i] = new ArrayList<Node>();
+        for (int i=1;i<tree.length;i++){
+            tree[i] = new ArrayList<>();
         }
 
         StringTokenizer st;
@@ -55,26 +62,29 @@ public class WeightedEdge {
             tree[child].add(new Node(parent, edgeWeight));
         }
 
-        for (int i=1;i<=nodes;i++){
-            visited = new boolean[nodes+1]; //방문 배열 초기화
-            visited[i] = true;
-            dfs(i,0); //각 노드 dfs 탐색
-        }
+        dfs(1,0); //루트노드와 가장 먼 노드 찾기 (farthestNode)
+
+        Arrays.fill(visited,false); //방문 배열 초기화
+
+        dfs(farthestNode, 0); //최종 트리의 지름 구하기 (farthestNode에서 가장 먼 노드까지 간선 가중치)
 
         System.out.println(maxEdge); //최대 간선 경로
 
     }
 
-    static int maxEdge;
+    static int maxEdge; //최대 간선
+    static int farthestNode; //루트노드에서 가장 먼 노드
 
     static void dfs(int num, int edge){
+        visited[num] = true;
+
         if (maxEdge < edge){
             maxEdge = edge; //간선 가중치 업데이트
+            farthestNode = num; //가장 먼 노드
         }
 
         for (Node node : tree[num]){
             if (!visited[node.num]){ //미방문 자식노드면
-                visited[node.num] = true;
                 dfs(node.num, edge + node.edge); //간선 가중치 누적시키면서 dfs 재귀 실행
             }
         }
