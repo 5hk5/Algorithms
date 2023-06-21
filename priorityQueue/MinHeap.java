@@ -12,20 +12,19 @@ public class MinHeap {
 
         int N = Integer.parseInt(br.readLine()); //테스트케이스 수
 
-
         PriorityQueue<Integer> q = new PriorityQueue<>();
 
         for (int i=0;i<N;i++){
-            int input = Integer.parseInt(br.readLine());
+            int input = Integer.parseInt(br.readLine()); //입력값
 
-            if (input>0){
+            if (input>0){ //0 초과 시 큐에 삽입
                 q.add(input);
             }
 
-            if (input==0){
-                if (q.isEmpty()){
+            if (input==0){ //0일 때
+                if (q.isEmpty()){ //큐 비면 0 출력
                     System.out.println(0);
-                } else {
+                } else {  //가장 작은 값 출력
                     System.out.println(q.poll());
                 }
             }
